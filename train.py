@@ -1,17 +1,17 @@
-# fase3_train.py
-from skimage import color
+# train.py
+import numpy as np
 from tensorflow.keras.utils import to_categorical
 
-def preprocess_and_train(model, x_train, y_train, epochs=5):
-    print("Preprocesando datos (grayscale y normalización)...")
-    grey_xtrain = color.rgb2gray(x_train)
-    grey_xtrain = grey_xtrain / 255.0
-    grey_xtrain = grey_xtrain[..., None]  # expand dims para el canal
+def preprocess_and_train(model, x_train, y_train, epochs=10):
+    print("Preprocesando datos (normalización y codificación)...")
 
-    ytrain_cat = to_categorical(y_train)
+    # Normalización (manteniendo 3 canales)
+    x_train = x_train.astype('float32') / 255.0
+
+    # Codificación one-hot
+    y_train = to_categorical(y_train, 10)
 
     print("Compilando y entrenando el modelo...")
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(grey_xtrain, ytrain_cat, epochs=25, batch_size=128, validation_split=0.1)
-    model.save("modelo_cifar10.h5")
-print("Modelo guardado como modelo_cifar10.h5")
+    model.fit(x_train, y_train, epochs=epochs, batch_size=128, validation_split=0.1)
+
