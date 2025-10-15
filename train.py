@@ -12,4 +12,6 @@ def preprocess_and_train(model, x_train, y_train, epochs=5):
 
     print("Compilando y entrenando el modelo...")
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(grey_xtrain, ytrain_cat, epochs=epochs, batch_size=128, validation_split=0.1)
+    model.fit(grey_xtrain, ytrain_cat, epochs=25, batch_size=128, validation_split=0.1)
+    model.save("modelo_cifar10.h5")
+print("Modelo guardado como modelo_cifar10.h5")
