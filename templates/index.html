@@ -1,28 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CIFAR-10 Viewer</title>
-    <style>
-        img { width: 100px; margin: 5px; border: 1px solid #ccc; }
-        body { font-family: Arial, sans-serif; }
-        .container { display: flex; flex-wrap: wrap; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CIFAR-10 — Interfaz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#eef2f7; }
+    .card-img-top { object-fit: cover; height:140px; }
+    .example-card { width: 160px; margin:10px; }
+    .hero { background: linear-gradient(90deg,#3b82f6 0%,#06b6d4 100%); color:#fff; padding:30px; border-radius:8px; }
+    footer { margin-top:30px; color:#6b7280; font-size:0.9rem; }
+  </style>
 </head>
 <body>
-    <h1>Ejemplos de imágenes CIFAR-10</h1>
-
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        {% for img in img_names %}
-            <img src="{{ url_for('uploaded_file', filename=img) }}" alt="Imagen {{ loop.index }}">
-        {% endfor %}
+      <a class="navbar-brand fw-bold" href="#">CIFAR-10 Demo</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="hero mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1">Visor y Clasificador CIFAR-10</h1>
+          <p class="mb-0">Visualiza ejemplos limpios del dataset y sube tus imágenes para que la red neuronal las identifique.</p>
+        </div>
+      </div>
     </div>
 
-    <h2>Sube tu imagen para predecir</h2>
-    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Predecir</button>
-    </form>
+    <h5 class="mb-3">Ejemplos seleccionados</h5>
+    <div class="d-flex flex-wrap justify-content-start mb-4">
+      {% for img in img_names %}
+        <div class="card example-card text-center shadow-sm">
+          <img src="{{ url_for('uploaded_file', filename=img) }}" class="card-img-top" alt="Ejemplo {{ loop.index }}">
+          <div class="card-body p-2">
+            <small class="text-muted text-truncate d-block" style="max-width:140px;">{{ img }}</small>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+          <h5 class="mb-3">Sube tu imagen</h5>
+          <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <input type="file" name="file" accept="image/*" class="form-control" required>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Enviar y predecir</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+          <h5>Información</h5>
+          <p class="small text-muted mb-0">El modelo está entrenado con CIFAR-10. La precisión de la predicción depende del entrenamiento y la calidad de la imagen subida.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-4">
+      <div class="d-flex justify-content-between">
+        <div>© CIFAR-10 Demo</div>
+        <div class="text-muted">Hecho con TensorFlow · Interfaz Bootstrap</div>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
 
